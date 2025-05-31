@@ -3,23 +3,86 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Premium To-Do App</title>
+  <title>To-Do</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="app-container">
     <header>
-      <h1>My Premium To-Do List</h1>
+      <h1>To-Do</h1>
     </header>
 
     <section class="input-section">
       <input type="text" id="task-input" placeholder="Add a new task..." />
+      <input type="date" id="due-date-input" />
+      <select id="priority-select" aria-label="Select task priority">
+        <option value="low" selected>Low Priority</option>
+        <option value="medium">Medium Priority</option>
+        <option value="high">High Priority</option>
+      </select>
       <button id="add-task-btn">Add</button>
     </section>
 
-    <section class="tasks-section">
-      <ul id="task-list"></ul>
+    <section class="filters-section">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="active">Active</button>
+      <button class="filter-btn" data-filter="completed">Completed</button>
+      <button class="filter-btn" data-filter="overdue">Overdue</button>
     </section>
+
+    <section class="tasks-section">
+      <ul id="task-list" draggable="true"></ul>
+    </section>
+
+    <section class="footer-section">
+      <div id="task-count"></div>
+      <button id="clear-completed-btn">Clear Completed</button>
+    </section>
+
+    <section class="focus-section">
+        <h2>Focus Session</h2>
+        
+        <div class="focus-task-select">
+            <label for="focus-task">Focus on task:</label>
+            <select id="focus-task">
+            <option value="">-- No task selected --</option>
+            <!-- Options populated dynamically -->
+            </select>
+        </div>
+
+        <div class="timer-display" id="timer-display">25:00</div>
+
+        <div class="timer-controls">
+            <button id="start-btn">Start</button>
+            <button id="pause-btn" disabled>Pause</button>
+            <button id="reset-btn" disabled>Reset</button>
+        </div>
+
+        <div class="session-info">
+            <span id="session-count">Sessions completed: 0</span>
+        </div>
+        <div class="timer-settings">
+            <label>Focus Duration (minutes):
+                <input type="number" id="focus-duration-input" min="1" max="60" value="25" />
+            </label>
+            <label>Short Break (minutes):
+                <input type="number" id="short-break-input" min="1" max="30" value="5" />
+            </label>
+            <label>Long Break (minutes):
+                <input type="number" id="long-break-input" min="1" max="60" value="15" />
+            </label>
+            </div>
+
+            <div class="music-controls">
+            <button id="music-toggle-btn">Play Music</button>
+            <audio id="background-music" loop>
+                <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_2f2d9e1b2d.mp3?filename=relaxing-background-music-ambient-10839.mp3" type="audio/mpeg" />
+                Your browser does not support the audio element.
+            </audio>
+            </div>
+
+    </section>
+
   </div>
 
   <script src="script.js"></script>

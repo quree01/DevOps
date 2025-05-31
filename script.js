@@ -1,32 +1,66 @@
-const input = document.getElementById('todo-input');
-const list = document.getElementById('todo-list');
+const taskInput = document.getElementById('task-input');
+const addTaskBtn = document.getElementById('add-task-btn');
+const taskList = document.getElementById('task-list');
 
-// Add task on Enter key
-input.addEventListener('keypress', function(event) {
-    if (event.key === 'Enter' && input.value.trim() !== '') {
-        addTodo(input.value.trim());
-        input.value = '';
-    }
+// Load tasks from localStorage
+let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+
+function saveTasks() {
+  localStorage.setItem('tasks', JSON.stringify(tasks));
+}
+
+function renderTasks() {
+  taskList.innerHTML = '';
+  tasks.forEach((task, index) => {
+    const li = document.createElement('li');
+    li.className = task.completed ? 'completed' : '';
+
+    const span = document.createElement('span');
+    span.className = 'task-text';
+    span.textContent = task.text;
+    span.addEventListener('click', () => toggleComplete(index));
+
+    const deleteBtn = document.createElement('button');
+    deleteBtn.className = 'delete-btn';
+    deleteBtn.innerHTML = '&times;';
+    deleteBtn.title = 'Delete task';
+    deleteBtn.addEventListener('click', () => deleteTask(index));
+
+    li.appendChild(span);
+    li.appendChild(deleteBtn);
+    taskList.appendChild(li);
+  });
+}
+
+function addTask() {
+  const text = taskInput.value.trim();
+  if (text === '') return;
+  tasks.push({ text, completed: false });
+  saveTasks();
+  renderTasks();
+  taskInput.value = '';
+  taskInput.focus();
+}
+
+function toggleComplete(index) {
+  tasks[index].completed = !tasks[index].completed;
+  saveTasks();
+  renderTasks();
+}
+
+function deleteTask(index) {
+  tasks.splice(index, 1);
+  saveTasks();
+  renderTasks();
+}
+
+addTaskBtn.addEventListener('click', addTask);
+
+taskInput.addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') {
+    addTask();
+  }
 });
 
-// Add task function
-function addTodo(task) {
-    const li = document.createElement('li');
-    li.textContent = task;
-
-    // Mark as completed on click
-    li.addEventListener('click', function() {
-        li.classList.toggle('completed');
-    });
-
-    // Delete button
-    const deleteBtn = document.createElement('button');
-    deleteBtn.textContent = 'Delete';
-    deleteBtn.onclick = function(event) {
-        event.stopPropagation(); // Prevent li click event
-        list.removeChild(li);
-    };
-
-    li.appendChild(deleteBtn);
-    list.appendChild(li);
-}
+// Initial render
+renderTasks();
